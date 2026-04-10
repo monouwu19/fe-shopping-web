@@ -1,0 +1,159 @@
+.cart-page-scope{
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --line: #e8e8ed;
+  --bg-soft: #f5f5f7;
+  --white: #ffffff;
+  --accent: #0071e3;
+  --shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+  --radius-lg: 28px;
+}
+
+.cart-page-scope *{ margin: 0; padding: 0; box-sizing: border-box; }
+.cart-page-scope body{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: linear-gradient(180deg, #fbfbfd 0%, #f3f4f8 100%);
+}
+.cart-page-scope a{ color: inherit; text-decoration: none; }
+.cart-page-scope button, .cart-page-scope input{ font: inherit; }
+.cart-page-scope .container{ width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
+
+.cart-page-scope .header{
+  position: sticky; top: 0; z-index: 10;
+  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,0.82);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.cart-page-scope .header-inner{
+  min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.cart-page-scope .logo{ font-size: 28px; font-weight: 700; letter-spacing: -0.03em; }
+.cart-page-scope .nav{ display: flex; align-items: center; gap: 28px; }
+.cart-page-scope .nav a, .cart-page-scope .text-link{ font-size: 15px; color: var(--muted); transition: color .25s ease; }
+.cart-page-scope .nav a:hover, .cart-page-scope .text-link:hover{ color: var(--accent); }
+.cart-page-scope .header-actions{ display: flex; align-items: center; gap: 16px; }
+
+.cart-page-scope .btn-cta, .cart-page-scope .btn-dark, .cart-page-scope .outline-btn, .cart-page-scope .ghost-btn, .cart-page-scope .coupon-row button, .cart-page-scope .qty-control button, .cart-page-scope .remove-btn{
+  border: none; cursor: pointer; transition: all .25s ease;
+}
+.cart-page-scope .btn-cta{
+  padding: 11px 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--white); font-size: 14px; font-weight: 600;
+}
+.cart-page-scope .btn-cta.active, .cart-page-scope .btn-dark{ background: var(--text); color: var(--white); border-color: var(--text); }
+.cart-page-scope .btn-dark:hover, .cart-page-scope .btn-cta.active:hover{ background: #000; transform: translateY(-1px); }
+
+.cart-page-scope .page-hero{ padding: 56px 0 28px; }
+.cart-page-scope .hero-inner{ display: grid; grid-template-columns: 1.4fr 0.7fr; gap: 28px; align-items: stretch; }
+.cart-page-scope .hero-copy, .cart-page-scope .hero-card, .cart-page-scope .cart-main, .cart-page-scope .summary-card, .cart-page-scope .faq-card{
+  background: rgba(255,255,255,0.86); border: 1px solid rgba(255,255,255,0.7); box-shadow: var(--shadow);
+}
+.cart-page-scope .hero-copy{ border-radius: 34px; padding: 42px; }
+.cart-page-scope .eyebrow, .cart-page-scope .section-kicker{
+  font-size: 13px; text-transform: uppercase; letter-spacing: .16em; color: var(--accent); margin-bottom: 12px; font-weight: 700;
+}
+.cart-page-scope .hero-copy h1{
+  font-size: clamp(34px, 5vw, 56px); line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 18px;
+}
+.cart-page-scope .hero-copy p:last-child{ max-width: 760px; font-size: 17px; line-height: 1.8; color: var(--muted); }
+.cart-page-scope .hero-card{
+  border-radius: 30px; padding: 30px; display: flex; flex-direction: column; justify-content: center; gap: 12px;
+  background: linear-gradient(135deg, #0f172a 0%, #1f2937 100%); color: #fff;
+}
+.cart-page-scope .hero-card span{
+  color: rgba(255,255,255,0.7); font-size: 14px; letter-spacing: .08em; text-transform: uppercase;
+}
+.cart-page-scope .hero-card strong{ font-size: 28px; line-height: 1.2; }
+.cart-page-scope .hero-card p{ color: rgba(255,255,255,0.78); line-height: 1.7; }
+
+.cart-page-scope .cart-page{ padding: 16px 0 40px; }
+.cart-page-scope .cart-layout{ display: grid; grid-template-columns: minmax(0, 1.65fr) 340px; gap: 28px; align-items: start; }
+.cart-page-scope .cart-main{ border-radius: var(--radius-lg); padding: 30px; }
+.cart-page-scope .section-head, .cart-page-scope .summary-head, .cart-page-scope .summary-line, .cart-page-scope .summary-total, .cart-page-scope .item-top, .cart-page-scope .item-bottom, .cart-page-scope .coupon-row{
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.cart-page-scope .section-head{ margin-bottom: 24px; }
+.cart-page-scope .section-head h2, .cart-page-scope .summary-head h2, .cart-page-scope .faq-header h2{ font-size: 30px; letter-spacing: -0.03em; }
+.cart-page-scope .ghost-btn{ padding: 12px 18px; border-radius: 999px; background: #f3f4f6; color: var(--text); }
+.cart-page-scope .ghost-btn:hover, .cart-page-scope .outline-btn:hover, .cart-page-scope .coupon-row button:hover, .cart-page-scope .qty-control button:hover{ background: #e8edf6; }
+
+.cart-page-scope .cart-list{ display: flex; flex-direction: column; gap: 20px; }
+.cart-page-scope .cart-item{
+  display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; padding: 22px;
+  border: 1px solid var(--line); background: linear-gradient(180deg, #ffffff 0%, #fafafe 100%); border-radius: 24px;
+}
+.cart-page-scope .item-image{
+  min-height: 170px; border-radius: 22px; display: flex; align-items: end; justify-content: center; padding-bottom: 20px;
+  font-weight: 700; color: rgba(29,29,31,0.75); letter-spacing: .02em;
+}
+.cart-page-scope .iphone-gradient{ background: linear-gradient(135deg, #f2f2f7 0%, #dbeafe 100%); }
+.cart-page-scope .mac-gradient{ background: linear-gradient(135deg, #eff6ff 0%, #e5e7eb 100%); }
+.cart-page-scope .accessory-gradient{ background: linear-gradient(135deg, #fdf2f8 0%, #ede9fe 100%); }
+.cart-page-scope .item-category{
+  font-size: 13px; color: var(--accent); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 8px; font-weight: 700;
+}
+.cart-page-scope .item-top h3{ font-size: 24px; letter-spacing: -0.03em; margin-bottom: 8px; }
+.cart-page-scope .item-meta, .cart-page-scope .price-box span, .cart-page-scope .qty-box span, .cart-page-scope .benefits li, .cart-page-scope .faq-card p, .cart-page-scope .footer p, .cart-page-scope .footer a{
+  color: var(--muted); line-height: 1.7;
+}
+.cart-page-scope .remove-btn{ padding: 10px 16px; border-radius: 999px; background: #fff2f2; color: #c62828; }
+.cart-page-scope .remove-btn:hover{ background: #ffe4e4; }
+.cart-page-scope .item-bottom{ margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--line); }
+.cart-page-scope .qty-box, .cart-page-scope .price-box{ display: flex; flex-direction: column; gap: 10px; }
+.cart-page-scope .qty-control{
+  display: inline-flex; align-items: center; gap: 18px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff;
+}
+.cart-page-scope .qty-control button{ width: 30px; height: 30px; border-radius: 50%; background: #f3f4f6; }
+.cart-page-scope .price-box strong{ font-size: 24px; letter-spacing: -0.03em; }
+
+.cart-page-scope .summary-card{ position: sticky; top: 104px; border-radius: var(--radius-lg); padding: 28px; }
+.cart-page-scope .summary-head{ align-items: flex-start; flex-direction: column; margin-bottom: 12px; }
+.cart-page-scope .summary-line{ padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.cart-page-scope .coupon-box{ padding: 22px 0; }
+.cart-page-scope .coupon-box label{ display: block; font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+.cart-page-scope .coupon-row input{
+  flex: 1; min-width: 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; outline: none; background: #fff;
+}
+.cart-page-scope .coupon-row input:focus{ border-color: #b9d7fb; box-shadow: 0 0 0 4px rgba(0,113,227,0.08); }
+.cart-page-scope .coupon-row button{ padding: 14px 16px; border-radius: 14px; background: #eef3fb; }
+.cart-page-scope .summary-total{ margin: 2px 0 22px; padding-top: 22px; border-top: 1px solid var(--line); align-items: end; }
+.cart-page-scope .summary-total span{ font-size: 16px; font-weight: 600; }
+.cart-page-scope .summary-total strong{ font-size: 28px; letter-spacing: -0.04em; }
+.cart-page-scope .full{ display: block; width: 100%; text-align: center; padding: 15px 18px; border-radius: 999px; font-weight: 600; }
+.cart-page-scope .outline-btn{ margin-top: 12px; border: 1px solid var(--line); background: #fff; }
+.cart-page-scope .benefits{ margin-top: 22px; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+
+.cart-page-scope .faq-section{ padding: 24px 0 20px; }
+.cart-page-scope .faq-header{ margin-bottom: 24px; }
+.cart-page-scope .faq-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.cart-page-scope .faq-card{ padding: 26px; border-radius: 24px; }
+.cart-page-scope .faq-card h3{ font-size: 20px; line-height: 1.4; margin-bottom: 12px; letter-spacing: -0.02em; }
+
+.cart-page-scope .footer{
+  margin-top: 68px; padding: 48px 0 60px; border-top: 1px solid rgba(0,0,0,0.06); background: rgba(255,255,255,0.66);
+}
+.cart-page-scope .footer-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.cart-page-scope .footer strong, .cart-page-scope .footer h4{ display: block; margin-bottom: 12px; }
+.cart-page-scope .footer a{ display: block; margin-bottom: 8px; }
+
+@media (max-width: 1100px) {
+.cart-page-scope .hero-inner, .cart-page-scope .cart-layout, .cart-page-scope .faq-grid{ grid-template-columns: 1fr; }
+.cart-page-scope .summary-card{ position: static; }
+}
+
+@media (max-width: 860px) {
+.cart-page-scope .header-inner{ flex-wrap: wrap; padding: 16px 0; }
+.cart-page-scope .nav, .cart-page-scope .header-actions{ width: 100%; justify-content: space-between; }
+.cart-page-scope .cart-item{ grid-template-columns: 1fr; }
+.cart-page-scope .item-image{ min-height: 140px; }
+}
+
+@media (max-width: 640px) {
+.cart-page-scope .container{ width: min(100% - 28px, 1240px); }
+.cart-page-scope .hero-copy, .cart-page-scope .cart-main, .cart-page-scope .summary-card, .cart-page-scope .faq-card{ padding: 22px; }
+.cart-page-scope .section-head, .cart-page-scope .item-top, .cart-page-scope .item-bottom, .cart-page-scope .coupon-row, .cart-page-scope .footer-grid{ flex-direction: column; align-items: stretch; display: flex; }
+.cart-page-scope .nav{ gap: 14px; flex-wrap: wrap; }
+.cart-page-scope .header-actions{ gap: 10px; flex-wrap: wrap; }
+.cart-page-scope .section-head h2, .cart-page-scope .summary-head h2, .cart-page-scope .faq-header h2, .cart-page-scope .item-top h3{ font-size: 24px; }
+.cart-page-scope .price-box strong, .cart-page-scope .summary-total strong{ font-size: 24px; }
+}

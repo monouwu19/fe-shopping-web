@@ -1,0 +1,128 @@
+.site-header{
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,0.82);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.site-header-shell{
+  width: min(1240px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.site-header-inner{
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.site-logo,
+.site-nav-link,
+.site-text-link,
+.site-btn-cta{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.site-logo{
+  display: inline-flex;
+  align-items: center;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #1d1d1f;
+  text-decoration: none;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.site-nav{
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex: 0 0 auto;
+}
+
+.site-nav-link,
+.site-text-link{
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #6e6e73;
+  text-decoration: none;
+  line-height: 1.2;
+  transition: color .25s ease;
+  white-space: nowrap;
+}
+
+.site-nav-link:hover,
+.site-text-link:hover,
+.site-nav-link.active{
+  color: #0071e3;
+}
+
+.site-header-actions{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 0 0 auto;
+}
+
+.site-btn-cta{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 1px solid #e8e8ed;
+  background: #ffffff;
+  color: #1d1d1f;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all .25s ease;
+}
+
+.site-btn-cta:hover{
+  background: #1d1d1f;
+  color: #ffffff;
+  border-color: #1d1d1f;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 860px) {
+  .site-header-inner{
+    flex-wrap: wrap;
+    padding: 16px 0;
+  }
+
+  .site-nav,
+  .site-header-actions{
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header-shell{
+    width: min(100% - 28px, 1240px);
+  }
+
+  .site-nav{
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .site-header-actions{
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}
