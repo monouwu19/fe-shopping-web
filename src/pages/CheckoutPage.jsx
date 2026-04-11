@@ -1,94 +1,191 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SiteHeader from '../components/SiteHeader'
+import { apiRequest, formatCurrency, getAuthToken, normalizeCart } from '../services/api'
 import '../styles/checkout.css'
 
+function getItemPrice(item) {
+  return Number(item?.price || 0)
+}
+
+function getItemQuantity(item) {
+  return Number(item?.qty || item?.quantity || 1)
+}
+
+function getItemName(item) {
+  return item?.name || 'Sản phẩm'
+}
+
 export default function CheckoutPage() {
-  const [form, setForm] = useState({
-    fullName: '', phone: '', email: '', region: 'TP. Hồ Chí Minh', address: '', note: '',
-    delivery: 'home', payment: 'bank', needVat: false, company: '', taxCode: ''
-  })
+  const [cart, setCart] = useState({ id: null, items: [], subtotal: 0, total: 0 })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
 
-  const handleChange = (event) => {
-    const { name, value, type, checked } = event.target
-    setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
-  }
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        setLoading(true)
+        setError('')
+        setMessage('')
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    alert(`Xác nhận thanh toán thành công\n\nNgười nhận: ${form.fullName || 'Chưa nhập'}\nSố điện thoại: ${form.phone || 'Chưa nhập'}\nPhương thức thanh toán: ${form.payment}`)
+        const token = getAuthToken()
+        if (!token) {
+          throw new Error('Không tải được giỏ hàng để checkout. Hãy đăng nhập trước.')
+        }
+
+        const payload = await apiRequest('/api/cart', { includeAuth: true })
+        setCart(normalizeCart(payload))
+      } catch (err) {
+        setError(err.message || 'Không tải được giỏ hàng để checkout.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadCart()
+  }, [])
+
+  const items = cart.items || []
+
+  const subtotal = useMemo(() => {
+    if (cart.subtotal) return cart.subtotal
+    return items.reduce((sum, item) => sum + getItemPrice(item) * getItemQuantity(item), 0)
+  }, [cart.subtotal, items])
+
+  const shippingFee = useMemo(() => (items.length > 0 ? 30000 : 0), [items])
+  const total = subtotal + shippingFee
+
+  const handlePlaceOrder = () => {
+    setMessage(
+      'Backend hiện chưa có API /api/orders để tạo đơn hàng. Trang này đang đọc dữ liệu giỏ hàng đúng bố cục, nhưng chưa thể lưu đơn.'
+    )
   }
 
   return (
     <div className="checkout-page-scope">
       <SiteHeader />
 
-      <main className="checkout-page">
+      <section className="page-hero">
+        <div className="container hero-inner">
+          <div className="hero-copy">
+            <p className="eyebrow">Thanh toán Synex</p>
+            <h1>Thanh toán</h1>
+            <p>
+              Trang này đang đọc giỏ hàng từ backend local API 8080 và giữ nguyên
+              hệ class theo CSS checkout hiện tại.
+            </p>
+          </div>
+
+          <div className="hero-card">
+            <span>Checkout</span>
+            <strong>{items.length.toString().padStart(2, '0')} sản phẩm</strong>
+            <p>Backend chưa có API tạo đơn hàng, nên hiện chỉ hiển thị dữ liệu.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="checkout-page">
         <div className="container checkout-layout">
-          <section className="checkout-main">
-            <div className="section-head"><div><h2>Thông tin thanh toán</h2></div><div className="secure-pill">Bảo mật SSL · Xác thực đơn hàng</div></div>
-            <form className="checkout-form" onSubmit={handleSubmit}>
-              <div className="form-block">
-                <div className="block-header"><h3>Thông tin người nhận</h3><p>Điền chính xác để đội ngũ Synex xác nhận và giao hàng nhanh hơn.</p></div>
-                <div className="form-grid two-col">
-                  <label><span>Họ và tên</span><input name="fullName" type="text" placeholder="Nguyễn Văn A" value={form.fullName} onChange={handleChange} /></label>
-                  <label><span>Số điện thoại</span><input name="phone" type="tel" placeholder="0901 234 567" value={form.phone} onChange={handleChange} /></label>
-                </div>
-                <div className="form-grid two-col">
-                  <label><span>Email</span><input name="email" type="email" placeholder="ban@email.com" value={form.email} onChange={handleChange} /></label>
-                  <label><span>Khu vực</span><select name="region" value={form.region} onChange={handleChange}><option>TP. Hồ Chí Minh</option><option>Hà Nội</option><option>Đà Nẵng</option><option>Cần Thơ</option></select></label>
-                </div>
-                <div className="form-grid"><label><span>Địa chỉ nhận hàng</span><input name="address" type="text" placeholder="Số nhà, tên đường, phường/xã, quận/huyện" value={form.address} onChange={handleChange} /></label></div>
-                <div className="form-grid"><label><span>Ghi chú đơn hàng</span><textarea name="note" rows="4" placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao..." value={form.note} onChange={handleChange}></textarea></label></div>
-              </div>
+          <div className="checkout-main">
+            <div className="section-head">
+              <h2>Thông tin đơn hàng</h2>
+              <span className="secure-pill">API local 8080</span>
+            </div>
 
-              <div className="form-block">
-                <div className="block-header"><h3>Phương thức giao hàng</h3><p>Chọn hình thức nhận hàng phù hợp với nhu cầu của bạn.</p></div>
-                <div className="option-grid">
-                  <label className={`option-card ${form.delivery === 'home' ? 'active' : ''}`}><input type="radio" name="delivery" value="home" checked={form.delivery === 'home'} onChange={handleChange} /><div><strong>Giao hàng tận nơi</strong><p>Miễn phí nội thành cho đơn từ 10 triệu. Dự kiến 1 - 3 ngày.</p></div></label>
-                  <label className={`option-card ${form.delivery === 'store' ? 'active' : ''}`}><input type="radio" name="delivery" value="store" checked={form.delivery === 'store'} onChange={handleChange} /><div><strong>Nhận tại showroom</strong><p>Giữ hàng tại cửa hàng Synex gần nhất, hỗ trợ kiểm tra máy khi nhận.</p></div></label>
+            {loading && <p>Đang tải dữ liệu giỏ hàng...</p>}
+            {error && <p>{error}</p>}
+            {message && <p>{message}</p>}
+
+            {!loading && !error && (
+              <div className="checkout-form">
+                <div className="form-block">
+                  <div className="block-header">
+                    <h3>Sản phẩm đã chọn</h3>
+                    <p>Dữ liệu lấy trực tiếp từ giỏ hàng backend.</p>
+                  </div>
+
+                  {items.length === 0 ? (
+                    <p>Giỏ hàng đang trống.</p>
+                  ) : (
+                    <div className="summary-items">
+                      {items.map((item, index) => (
+                        <article className="summary-item" key={item.id || index}>
+                          <div className={`summary-thumb ${item.imageClass || 'iphone-gradient'}`}>
+                            {item.imageText || getItemName(item)}
+                          </div>
+                          <div>
+                            <h3>{getItemName(item)}</h3>
+                            <p>Số lượng: {getItemQuantity(item)}</p>
+                            <strong>
+                              {formatCurrency(getItemPrice(item) * getItemQuantity(item))}
+                            </strong>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-block">
+                  <div className="block-header">
+                    <h3>Lưu ý</h3>
+                    <p>
+                      Backend hiện chưa có endpoint tạo đơn hàng. Khi nào backend thêm
+                      <strong> POST /api/orders </strong>
+                      thì trang này mới lưu đơn vào database hoàn chỉnh.
+                    </p>
+                  </div>
                 </div>
               </div>
+            )}
+          </div>
 
-              <div className="form-block">
-                <div className="block-header"><h3>Phương thức thanh toán</h3><p>Lựa chọn cách thanh toán thuận tiện và phù hợp nhất.</p></div>
-                <div className="option-grid payment-grid">
-                  <label className={`option-card ${form.payment === 'bank' ? 'active' : ''}`}><input type="radio" name="payment" value="bank" checked={form.payment === 'bank'} onChange={handleChange} /><div><strong>Chuyển khoản ngân hàng</strong><p>Nhận xác nhận nhanh, ưu tiên xử lý đơn ngay sau khi thanh toán.</p></div></label>
-                  <label className={`option-card ${form.payment === 'cod' ? 'active' : ''}`}><input type="radio" name="payment" value="cod" checked={form.payment === 'cod'} onChange={handleChange} /><div><strong>Thanh toán khi nhận hàng</strong><p>Áp dụng cho đơn đủ điều kiện trong khu vực hỗ trợ COD.</p></div></label>
-                  <label className={`option-card ${form.payment === 'card' ? 'active' : ''}`}><input type="radio" name="payment" value="card" checked={form.payment === 'card'} onChange={handleChange} /><div><strong>Thẻ tín dụng / ghi nợ</strong><p>Bảo mật nhiều lớp, hỗ trợ xuất hóa đơn doanh nghiệp.</p></div></label>
-                </div>
-              </div>
+          <aside className="summary-card">
+            <div className="summary-head">
+              <h2>Tóm tắt</h2>
+              <p>Dữ liệu tính từ giỏ hàng hiện tại.</p>
+            </div>
 
-              <div className="form-block invoice-block">
-                <div className="block-header"><h3>Thông tin xuất hóa đơn</h3><p>Tùy chọn dành cho khách hàng cá nhân hoặc doanh nghiệp.</p></div>
-                <div className="invoice-toggle"><label><input name="needVat" type="checkbox" checked={form.needVat} onChange={handleChange} /> Tôi cần xuất hóa đơn VAT</label></div>
-                <div className="form-grid two-col">
-                  <label><span>Tên công ty</span><input name="company" type="text" placeholder="Công ty TNHH ABC" value={form.company} onChange={handleChange} /></label>
-                  <label><span>Mã số thuế</span><input name="taxCode" type="text" placeholder="0312xxxxxx" value={form.taxCode} onChange={handleChange} /></label>
-                </div>
-              </div>
+            <div className="summary-line">
+              <span>Tạm tính</span>
+              <strong>{formatCurrency(subtotal)}</strong>
+            </div>
 
-              <div className="form-actions"><Link to="/cart" className="outline-btn">Quay lại giỏ hàng</Link><button type="submit" className="btn-dark">Xác nhận thanh toán</button></div>
-            </form>
-          </section>
+            <div className="summary-line">
+              <span>Phí vận chuyển</span>
+              <strong>{formatCurrency(shippingFee)}</strong>
+            </div>
 
-          <aside className="order-sidebar">
-            <div className="summary-card">
-              <div className="summary-head"><h2>Chi tiết đơn hàng</h2></div>
-              <div className="summary-items">
-                <article className="summary-item"><div className="summary-thumb iphone-gradient">iPhone</div><div><h3>iPhone 15 Pro Max</h3><p>256GB · Titan Tự Nhiên</p><strong>29.990.000đ</strong></div></article>
-                <article className="summary-item"><div className="summary-thumb mac-gradient">Mac</div><div><h3>MacBook Air M3</h3><p>13 inch · 8GB · 256GB</p><strong>28.990.000đ</strong></div></article>
-                <article className="summary-item compact"><div className="summary-thumb accessory-gradient">AirPods</div><div><h3>AirPods Pro 2</h3><p>USB-C</p><strong>6.790.000đ</strong></div></article>
-              </div>
-              <div className="summary-line"><span>Tạm tính</span><strong>65.770.000đ</strong></div>
-              <div className="summary-line"><span>Giảm giá</span><strong>-1.500.000đ</strong></div>
-              <div className="summary-line"><span>Phí giao hàng</span><strong>Miễn phí</strong></div>
-              <div className="summary-total"><span>Tổng thanh toán</span><strong>64.270.000đ</strong></div>
-              <div className="policy-box"><h3>Cam kết dịch vụ</h3><ul><li>Hàng chính hãng Apple, nguyên seal</li><li>Hỗ trợ kỹ thuật và kích hoạt sau mua</li><li>Xuất hóa đơn đầy đủ theo yêu cầu</li></ul></div>
+            <div className="summary-total">
+              <span>Tổng cộng</span>
+              <strong>{formatCurrency(total)}</strong>
+            </div>
+
+            <button
+              type="button"
+              className="btn-dark"
+              onClick={handlePlaceOrder}
+              disabled={items.length === 0}
+            >
+              Đặt hàng
+            </button>
+
+            <Link to="/cart" className="outline-btn">
+              Quay lại giỏ hàng
+            </Link>
+
+            <div className="policy-box">
+              <h3>Trạng thái hiện tại</h3>
+              <ul>
+                <li>Đã nối được backend local API 8080</li>
+                <li>Đã đọc được giỏ hàng từ database</li>
+                <li>Chưa có API tạo đơn hàng</li>
+              </ul>
             </div>
           </aside>
         </div>
-      </main>
+      </section>
     </div>
   )
 }

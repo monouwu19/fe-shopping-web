@@ -1,9 +1,40 @@
 import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
 import SiteHeader from '../components/SiteHeader'
 import '../styles/products.css'
-import { products } from '../data/products'
+import { apiRequest, formatCurrency, normalizeProducts } from '../services/api'
 
 export default function ProductsPage() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true)
+        setError('')
+        const payload = await apiRequest('/api/products')
+        setProducts(normalizeProducts(payload))
+      } catch (err) {
+        setError(err.message || 'Không tải được danh sách sản phẩm.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadProducts()
+  }, [])
+
+  const categories = useMemo(() => {
+    const counts = products.reduce((accumulator, product) => {
+      accumulator[product.category] = (accumulator[product.category] || 0) + 1
+      return accumulator
+    }, {})
+
+    return Object.entries(counts)
+  }, [products])
+
   return (
     <div className="products-page">
       <SiteHeader />
@@ -14,36 +45,37 @@ export default function ProductsPage() {
             <div className="filter-header">☰ <strong>Bộ lọc</strong></div>
             <div className="filter-block">
               <h4>Loại sản phẩm</h4>
-              {[
-                ['iPhone', 8, true],
-                ['iPad', 6, false],
-                ['Mac', 5, false],
-                ['Phụ kiện', 12, false],
-              ].map(([name, count, active]) => (
-                <div className={`filter-item ${active ? 'active' : ''}`} key={name}>
+              {categories.length > 0 ? categories.map(([name, count], index) => (
+                <div className={`filter-item ${index === 0 ? 'active' : ''}`} key={name}>
                   <div className="icon-box"></div>
                   <span className="name">{name}</span>
                   <span className="count">{count}</span>
                 </div>
-              ))}
+              )) : <p>Đang đồng bộ danh mục...</p>}
             </div>
             <div className="filter-block"><h4>Màu sắc</h4></div>
-            <div className="filter-block toggle"><span>Chỉ hiển thị còn hàng</span><input type="checkbox" /></div>
+            <div className="filter-block toggle"><span>Chỉ hiển thị còn hàng</span><input type="checkbox" disabled /></div>
           </aside>
 
           <div className="product-area">
-            <div className="product-top"><div></div><div className="sort">Sắp xếp theo: <strong>Nổi bật</strong></div></div>
-            <div className="product-grid">
-              {products.map((product) => (
-                <Link className="product-card" to={`/products/${product.slug}`} key={product.slug}>
-                  {product.badge && <span className="badge">{product.badge}</span>}
-                  <img src={product.image} alt={product.name} />
-                  <p className="category">{product.category}</p>
-                  <h3>{product.name}</h3>
-                  <div className="price"><span className="new">{product.price}</span></div>
-                </Link>
-              ))}
-            </div>
+            <div className="product-top"><div></div><div className="sort">Nguồn dữ liệu: <strong>API local 8080</strong></div></div>
+
+            {loading && <p>Đang tải sản phẩm từ backend...</p>}
+            {error && <p>{error}</p>}
+
+            {!loading && !error && (
+              <div className="product-grid">
+                {products.map((product) => (
+                  <Link className="product-card" to={`/products/${product.slug}`} key={product.slug}>
+                    {product.badge && <span className="badge">{product.badge}</span>}
+                    <img src={product.image} alt={product.name} />
+                    <p className="category">{product.category}</p>
+                    <h3>{product.name}</h3>
+                    <div className="price"><span className="new">{formatCurrency(product.price)}</span></div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>

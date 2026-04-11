@@ -5,6 +5,7 @@ import ContactPage from './pages/ContactPage'
 import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
 import ProductDetailPage from './pages/ProductDetailPage'
+import ProfilePage from './pages/ProfilePage'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   )
 }

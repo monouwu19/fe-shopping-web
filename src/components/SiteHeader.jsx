@@ -12,10 +12,11 @@ export default function SiteHeader() {
             <NavLinkItem to="/dashboard" className="site-nav-link" activeClassName="active">Trang chủ</NavLinkItem>
             <NavLinkItem to="/products" className="site-nav-link" activeClassName="active">Sản phẩm</NavLinkItem>
             <NavLinkItem to="/contact" className="site-nav-link" activeClassName="active">Liên hệ</NavLinkItem>
+            <NavLinkItem to="/profile" className="site-nav-link" activeClassName="active">Hồ sơ</NavLinkItem>
           </nav>
 
           <div className="site-header-actions">
-            <Link className="site-text-link" to="/products">Tiếp tục mua sắm</Link>
+            <Link className="site-text-link" to="/profile">Tài khoản</Link>
             <Link className="site-btn-cta" to="/cart">Giỏ hàng</Link>
           </div>
         </div>
