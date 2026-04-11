@@ -144,10 +144,6 @@ export default function CartPage() {
           <div className="hero-copy">
             <p className="eyebrow">Giỏ hàng Synex</p>
             <h1>Giỏ hàng của bạn</h1>
-            <p>
-              Dữ liệu đang lấy từ backend local API 8080. Trang này đã nối với giỏ hàng
-              backend và giữ nguyên bố cục theo CSS hiện tại.
-            </p>
           </div>
 
           <div className="hero-card">
@@ -266,12 +262,6 @@ export default function CartPage() {
             <Link to="/products" className="outline-btn full">
               Tiếp tục mua sắm
             </Link>
-
-            <ul className="benefits">
-              <li>Kết nối backend local 8080</li>
-              <li>Cập nhật số lượng qua API cart</li>
-              <li>Cần JWT hợp lệ để thao tác</li>
-            </ul>
           </aside>
         </div>
       </section>

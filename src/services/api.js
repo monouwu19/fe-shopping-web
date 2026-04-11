@@ -6,10 +6,19 @@ const CART_ID_KEY = 'synex_cart_id'
 export const getApiBaseUrl = () => API_BASE_URL
 
 export function getAuthToken() {
+  const rawAuth = localStorage.getItem('synex_auth')
+  if (rawAuth) {
+    try {
+      const parsed = JSON.parse(rawAuth)
+      if (parsed?.token) return parsed.token
+    } catch {}
+  }
+
   for (const key of TOKEN_KEYS) {
     const value = localStorage.getItem(key)
     if (value) return value
   }
+
   return ''
 }
 

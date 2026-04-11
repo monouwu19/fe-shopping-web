@@ -1,7 +1,16 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import NavLinkItem from './NavLinkItem'
+import { useAuth } from '../context/AuthContext'
 
 export default function SiteHeader() {
+  const navigate = useNavigate()
+  const { isAuthenticated, user, logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
+
   return (
     <header className="site-header">
       <div className="site-header-shell">
@@ -16,7 +25,19 @@ export default function SiteHeader() {
           </nav>
 
           <div className="site-header-actions">
-            <Link className="site-text-link" to="/profile">Tài khoản</Link>
+            {isAuthenticated ? (
+              <>
+                <Link className="site-text-link" to="/profile">
+                  {user?.username || user?.email || 'Tài khoản'}
+                </Link>
+                <button className="site-btn-ghost" type="button" onClick={handleLogout}>
+                  Đăng xuất
+                </button>
+              </>
+            ) : (
+              <Link className="site-text-link" to="/login">Đăng nhập</Link>
+            )}
+
             <Link className="site-btn-cta" to="/cart">Giỏ hàng</Link>
           </div>
         </div>

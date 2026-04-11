@@ -142,18 +142,6 @@ export default function ProfilePage() {
             <div className="profile-summary-copy">
               <p className="eyebrow">TÀI KHOẢN CỦA TÔI</p>
               <h1>{displayName}</h1>
-              <p>
-                Trang hồ sơ này đang liên kết trực tiếp với backend qua
-                <strong> GET/PUT /api/users/me </strong>
-                và
-                <strong> GET /api/users/me/addresses</strong>.
-              </p>
-            </div>
-
-            <div className="profile-badges">
-              <span>API local 8080</span>
-              <span>{addresses.length} địa chỉ</span>
-              <span>Không dùng API orders</span>
             </div>
           </div>
 

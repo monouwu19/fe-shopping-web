@@ -71,10 +71,6 @@ export default function CheckoutPage() {
           <div className="hero-copy">
             <p className="eyebrow">Thanh toán Synex</p>
             <h1>Thanh toán</h1>
-            <p>
-              Trang này đang đọc giỏ hàng từ backend local API 8080 và giữ nguyên
-              hệ class theo CSS checkout hiện tại.
-            </p>
           </div>
 
           <div className="hero-card">
@@ -102,7 +98,6 @@ export default function CheckoutPage() {
                 <div className="form-block">
                   <div className="block-header">
                     <h3>Sản phẩm đã chọn</h3>
-                    <p>Dữ liệu lấy trực tiếp từ giỏ hàng backend.</p>
                   </div>
 
                   {items.length === 0 ? (
@@ -177,11 +172,6 @@ export default function CheckoutPage() {
 
             <div className="policy-box">
               <h3>Trạng thái hiện tại</h3>
-              <ul>
-                <li>Đã nối được backend local API 8080</li>
-                <li>Đã đọc được giỏ hàng từ database</li>
-                <li>Chưa có API tạo đơn hàng</li>
-              </ul>
             </div>
           </aside>
         </div>
